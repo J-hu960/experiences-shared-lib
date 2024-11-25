@@ -1,4 +1,4 @@
-module module github.com/J-hu960/experiences-shared-lib
+module github.com/J-hu960/experiences-shared-lib
 
 
 go 1.23.0
