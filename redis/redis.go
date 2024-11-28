@@ -39,7 +39,7 @@ func SubscribeToEvents(client *redis.Client, channel string, handler EventHandle
 			fmt.Printf("Error receiving message: %v\n", err)
 			continue
 		}
-		handler.handleEvent(msg)
+		handler.HandleEvent(msg)
 
 		fmt.Printf("Message %s recieved ", msg.Channel)
 	}
