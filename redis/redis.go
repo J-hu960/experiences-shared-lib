@@ -18,7 +18,7 @@ func NewRedisClient() *redis.Client {
 	})
 }
 
-func PublishEvent(client *redis.Client, channel string, message string) error {
+func PublishEvent(client *redis.Client, channel string, message interface{}) error {
 	pubsub := client.Publish(context.Background(), channel, message)
 	if pubsub.Err() != nil {
 		return fmt.Errorf("error publishing message: %v", pubsub.Err())
