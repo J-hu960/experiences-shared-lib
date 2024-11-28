@@ -8,7 +8,7 @@ import (
 )
 
 type EventHandler interface {
-	handleEvent(msg *redis.Message)
+	HandleEvent(msg *redis.Message)
 }
 
 func NewRedisClient() *redis.Client {
