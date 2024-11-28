@@ -7,6 +7,10 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+type EventHandler interface {
+	handleEvent(msg *redis.Message)
+}
+
 func NewRedisClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
@@ -21,4 +25,22 @@ func PublishEvent(client *redis.Client, channel string, message string) error {
 	}
 
 	return nil
+}
+
+func SubscribeToEvents(client *redis.Client, channel string, handler EventHandler) {
+	ctx := context.Background()
+	pubsub := client.Subscribe(ctx, channel)
+	defer pubsub.Close()
+
+	// Bloquea y espera mensajes
+	for {
+		msg, err := pubsub.ReceiveMessage(ctx)
+		if err != nil {
+			fmt.Printf("Error receiving message: %v\n", err)
+			continue
+		}
+		handler.handleEvent(msg)
+
+		fmt.Printf("Message %s recieved ", msg.Channel)
+	}
 }
