@@ -1,6 +1,8 @@
 package logger
 
 import (
+	"context"
+	"fmt"
 	"time"
 
 	"github.com/olivere/elastic/v7"
@@ -16,17 +18,20 @@ type ElasticHook struct {
 func (hook *ElasticHook) Fire(entry *logrus.Entry) error {
 	doc := map[string]interface{}{
 		"@timestamp": time.Now().UTC(),
-		"level":      entry.Level,
+		"level":      entry.Level.String(),
 		"message":    entry.Message,
 		"fields":     entry.Data,
 	}
+
 	_, err := hook.client.Index().
 		Index(hook.index).
 		BodyJson(doc).
-		Do(entry.Context)
+		Do(context.Background())
 
-	return err
-
+	if err != nil {
+		return fmt.Errorf("error indexing log entry: %w", err)
+	}
+	return nil
 }
 
 func (hook *ElasticHook) Levels() []logrus.Level {
