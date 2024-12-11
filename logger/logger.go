@@ -20,7 +20,7 @@ func InitializeLogger(elasticSearchURL string) error {
 		return nil
 	}
 
-	client, err := elastic.NewClientelastic.NewClient(
+	client, err := elastic.NewClient(
 		elastic.SetURL("https://localhost:9200"),
 		elastic.SetSniff(false),
 		elastic.SetHealthcheck(false),
