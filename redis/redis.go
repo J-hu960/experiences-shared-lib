@@ -29,7 +29,7 @@ func PublishEvent(client *redis.Client, channel string, message interface{}) err
 
 func SubscribeToEvents(client *redis.Client, channel string, handler EventHandler) {
 	ctx := context.Background()
-	pubsub := client.Subscribe(ctx, channel)
+	pubsub := client.Subscribe(ctx, channel) //aqui deberiamos pasarle un array de channels a los que se va a suscribir?
 	defer pubsub.Close()
 
 	// Bloquea y espera mensajes

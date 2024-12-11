@@ -1,7 +1,9 @@
 package logger
 
 import (
+	"crypto/tls"
 	"errors"
+	"net/http"
 
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
@@ -18,7 +20,16 @@ func InitializeLogger(elasticSearchURL string) error {
 		return nil
 	}
 
-	client, err := elastic.NewClient(elastic.SetURL(elasticSearchURL))
+	client, err := elastic.NewClientelastic.NewClient(
+		elastic.SetURL("https://localhost:9200"),
+		elastic.SetSniff(false),
+		elastic.SetHealthcheck(false),
+		elastic.SetHttpClient(&http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			},
+		}),
+	)
 	if err != nil {
 		return err
 	}
@@ -35,7 +46,7 @@ func InitializeLogger(elasticSearchURL string) error {
 	return nil
 }
 
-// GetLogger devuelve la instancia del logger inicializado
+// Aqui devolvemos la instancia de logger si ya tenemos uno (un Singleton).
 func GetLogger() (*logrus.Logger, error) {
 	if !initialized {
 		return nil, errors.New("logger has not been initialized")

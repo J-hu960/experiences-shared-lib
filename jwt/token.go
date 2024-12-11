@@ -19,7 +19,7 @@ type TokenClaims struct {
 	jwt.RegisteredClaims
 }
 
-// GenerateToken crea un token JWT para un usuario
+// GenerateToken crea un token JWT para un usuario (guarda info UserID)
 func GenerateToken(userID string) (string, error) {
 
 	claims := TokenClaims{
