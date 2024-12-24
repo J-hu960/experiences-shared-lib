@@ -47,7 +47,12 @@ func InitializeLogger(elasticSearchURL string) error {
 }
 
 // Aqui devolvemos la instancia de logger si ya tenemos uno (un Singleton).
-func GetLogger() (*logrus.Logger, error) {
+func GetLogger(url string) (*logrus.Logger, error) {
+	err := InitializeLogger(url)
+	if err != nil {
+		return nil, errors.New("error initializing")
+
+	}
 	if !initialized {
 		return nil, errors.New("logger has not been initialized")
 	}
